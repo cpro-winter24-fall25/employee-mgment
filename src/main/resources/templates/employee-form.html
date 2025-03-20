@@ -2,59 +2,70 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Employee Form</title>
+  <!-- Link to Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<h1>Employee Management System</h1>
 
-<form th:action="@{/submit-employee}" th:object="${employee}" method="post" onsubmit="return validateForm()" >
+<div class="container mt-5 col-5">
+  <h1 class="text-center">Employee Management System</h1>
 
-  <div>
-    <label for="name">Name:</label>
-    <input type="text" id="name" th:field="*{name}" placeholder="Enter Name" required />
-<!--    Span will not show because of the required attribute in the input -->
-<!--    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span>-->
-  </div>
+  <form th:action="@{/submit-employee}" th:object="${employee}" method="post" onsubmit="return validateForm()">
 
-  <div>
-    <label for="designation">Designation:</label>
-    <select id="designation" th:field="*{designation}" onchange="updateSalary()">
-      <option value="" selected>Select Designation</option>
-      <option value="Junior">Junior</option>
-      <option value="Senior">Senior</option>
-      <option value="Manager">Manager</option>
-    </select>
-    <span th:if="${#fields.hasErrors('designation')}" th:errors="*{designation}" style="color: red;"></span>
-  </div>
-
-  <div>
-    <label for="salary">Salary:</label>
-    <input type="text" id="salary" th:field="*{salary}" disabled />
-  </div>
-
-  <div>
-    <label for="fullTime">Employment Type:</label>
-    <input type="checkbox" id="fullTime" th:field="*{fullTime}" />
-    <span>Full-Time</span>
-  </div>
-
-  <div>
-    <label>Departments:</label>
-    <span id="departmentError" style="color: red; display: none;">Please select at least one department.</span>
-    <div th:each="department, iterStat : ${departments}">
-      <input type="checkbox" th:field="*{departments}" th:id="'department_' + ${iterStat.index}" th:value="${department}" />
-      <label th:for="'department_' + ${iterStat.index}" th:text="${department}"></label>
+    <!-- Name Field -->
+    <div class="mb-3">
+      <label for="name" class="form-label">Name:</label>
+      <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Enter Name" required />
     </div>
-  </div>
 
-  <div>
-    <button type="submit">Register</button>
-  </div>
+    <!-- Designation Field -->
+    <div class="mb-3">
+      <label for="designation" class="form-label">Designation:</label>
+      <select id="designation" th:field="*{designation}" class="form-select" onchange="updateSalary()">
+        <option value="" selected>Select Designation</option>
+        <option value="Junior">Junior</option>
+        <option value="Senior">Senior</option>
+        <option value="Manager">Manager</option>
+      </select>
+      <span th:if="${#fields.hasErrors('designation')}" th:errors="*{designation}" class="text-danger"></span>
+    </div>
 
-</form>
+    <!-- Salary Field -->
+    <div class="mb-3">
+      <label for="salary" class="form-label">Salary:</label>
+      <input type="text" id="salary" th:field="*{salary}" class="form-control" disabled />
+    </div>
 
+    <!-- Employment Type -->
+    <div class="mb-3">
+      <label for="fullTime" class="form-label">Employment Type:</label>
+      <div class="form-check">
+        <input type="checkbox" id="fullTime" th:field="*{fullTime}" class="form-check-input" />
+        <label for="fullTime" class="form-check-label">Full-Time</label>
+      </div>
+    </div>
 
+    <!-- Departments -->
+    <div class="mb-3">
+      <label class="form-label">Departments:</label>
+      <span id="departmentError" class="text-danger" style="display: none;">Please select at least one department.</span>
+      <div th:each="department, iterStat : ${departments}">
+        <input type="checkbox" th:field="*{departments}" th:id="'department_' + ${iterStat.index}" th:value="${department}" class="form-check-input" />
+        <label th:for="'department_' + ${iterStat.index}" th:text="${department}" class="form-check-label"></label>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div>
+      <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+
+  </form>
+</div>
+
+<!-- Inject Thymeleaf values into JavaScript variables -->
 <script th:inline="javascript">
-  // Inject Thymeleaf values into JavaScript variables
   const JUNIOR_SALARY = [[${JUNIOR_SALARY}]];
   const SENIOR_SALARY = [[${SENIOR_SALARY}]];
   const MANAGER_SALARY = [[${MANAGER_SALARY}]];
