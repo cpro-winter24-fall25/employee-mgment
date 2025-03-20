@@ -1,6 +1,7 @@
 package com.cpro.springboot.employeems.controller;
 
 import com.cpro.springboot.employeems.model.Employee;
+import com.cpro.springboot.employeems.model.Salary;
 import com.cpro.springboot.employeems.service.SalaryService;
 import com.cpro.springboot.employeems.service.DepartmentService;
 import jakarta.validation.Valid;
@@ -29,6 +30,9 @@ public class EmployeeController {
     public String showForm(Model theModel) {
         theModel.addAttribute("employee", new Employee());
         theModel.addAttribute("departments", departmentService.getDepartments());
+        theModel.addAttribute("JUNIOR_SALARY", Salary.JUNIOR_SALARY);
+        theModel.addAttribute("SENIOR_SALARY", Salary.SENIOR_SALARY);
+        theModel.addAttribute("MANAGER_SALARY", Salary.MANAGER_SALARY);
         return "employee-form";
     }
 
@@ -39,6 +43,9 @@ public class EmployeeController {
 
         if (theBindingResult.hasErrors()) {
             theModel.addAttribute("departments", departmentService.getDepartments());
+            theModel.addAttribute("JUNIOR_SALARY", Salary.JUNIOR_SALARY);
+            theModel.addAttribute("SENIOR_SALARY", Salary.SENIOR_SALARY);
+            theModel.addAttribute("MANAGER_SALARY", Salary.MANAGER_SALARY);
             return "employee-form";
         }
 
