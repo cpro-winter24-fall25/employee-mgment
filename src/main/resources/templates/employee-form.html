@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Employee Form</title>
+</head>
+<body>
+<h1>Employee Management System</h1>
+
+<form th:action="@{/submit-employee}" th:object="${employee}" method="post" onsubmit="return validateForm()" >
+
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" th:field="*{name}" placeholder="Enter Name" required />
+<!--    Span will not show because of the required attribute in the input -->
+<!--    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span>-->
+  </div>
+
+  <div>
+    <label for="designation">Designation:</label>
+    <select id="designation" th:field="*{designation}" onchange="updateSalary()">
+      <option value="" selected>Select Designation</option>
+      <option value="Junior">Junior</option>
+      <option value="Senior">Senior</option>
+      <option value="Manager">Manager</option>
+    </select>
+    <span th:if="${#fields.hasErrors('designation')}" th:errors="*{designation}" style="color: red;"></span>
+  </div>
+
+  <div>
+    <label for="salary">Salary:</label>
+    <input type="text" id="salary" th:field="*{salary}" disabled />
+  </div>
+
+  <div>
+    <label for="fullTime">Employment Type:</label>
+    <input type="checkbox" id="fullTime" th:field="*{fullTime}" />
+    <span>Full-Time</span>
+  </div>
+
+  <div>
+    <label>Departments:</label>
+    <span id="departmentError" style="color: red; display: none;">Please select at least one department.</span>
+    <div th:each="department, iterStat : ${departments}">
+      <input type="checkbox" th:field="*{departments}" th:id="'department_' + ${iterStat.index}" th:value="${department}" />
+      <label th:for="'department_' + ${iterStat.index}" th:text="${department}"></label>
+    </div>
+  </div>
+
+  <div>
+    <button type="submit">Register</button>
+  </div>
+
+</form>
+
+
+<script th:inline="javascript">
+  // Inject Thymeleaf values into JavaScript variables
+  const JUNIOR_SALARY = [[${JUNIOR_SALARY}]];
+  const SENIOR_SALARY = [[${SENIOR_SALARY}]];
+  const MANAGER_SALARY = [[${MANAGER_SALARY}]];
+
+  function updateSalary() {
+      let designation = document.getElementById("designation").value;
+      let salaryField = document.getElementById("salary");
+
+      let salaries = {
+          "Junior": JUNIOR_SALARY,
+          "Senior": SENIOR_SALARY,
+          "Manager": MANAGER_SALARY
+      };
+
+      salaryField.value = salaries[designation] || 0;
+  }
+
+  // This function is called on page load
+  window.onload = function() {
+      updateSalary();
+  }
+
+  // Validate the form before submission
+  function validateForm() {
+    let checkboxes = document.getElementsByName("departments");
+    let isChecked = false;
+
+    // Check if at least one checkbox is selected
+    for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            isChecked = true;
+            break;
+        }
+    }
+
+    // If no checkbox is selected, show error and prevent form submission
+    if (!isChecked) {
+        document.getElementById("departmentError").style.display = "inline";
+        return false; // Prevent form submission
+    }
+
+    // If validation passed, return true to allow form submission
+    return true;
+  }
+</script>
+
+</body>
+</html>

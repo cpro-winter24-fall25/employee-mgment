@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Registration Success</title>
+</head>
+<body>
+<h1>Employee Details</h1>
+
+<div>
+    <h2>Employee Information</h2>
+    <p><strong>Name:</strong> <span th:text="${employee.name}"></span></p>
+    <p><strong>Designation:</strong> <span th:text="${employee.designation}"></span></p>
+    <p><strong>Salary:</strong> $<span th:text="${employee.salary}"></span>0</p>
+    <p><strong>Employment Type:</strong> <span th:text="${employee.fullTime ? 'Full-Time' : 'Part-Time'}"></span></p>
+
+    <h3>Department(s):</h3>
+    <ul>
+        <li th:each="department : ${employee.departments}" th:text="${department}"></li>
+    </ul>
+
+    <div>
+        <a href="/employee-form" th:href="@{/employee-form}">Go back to the form</a> <!-- Link to go back to the form -->
+    </div>
+</div>
+</body>
+</html>
